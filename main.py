@@ -5,6 +5,7 @@ from routes.auth import router as auth_router
 from routes.quotes import router as quote_router
 from routes.line_items import router as line_items_router
 from routes.estimator import router as estimator_router
+from routes.pdf import router as pdf_router
 
 app = FastAPI(title="Domnak API")
 
@@ -19,6 +20,7 @@ app.include_router(auth_router, prefix="/api/auth")
 app.include_router(quote_router, prefix="/api/quotes")
 app.include_router(line_items_router, prefix="/api/line-items")
 app.include_router(estimator_router, prefix="/api/estimator")
+app.include_router(pdf_router, prefix="/api/pdf")
 
 @app.get("/")
 def root():
