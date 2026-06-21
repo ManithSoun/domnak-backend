@@ -1,15 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from models.auth import SignupRequest, LoginRequest
 from services.supabase import supabase
 
 router = APIRouter()
-
-class SignupRequest(BaseModel):
-  email: str
-  password: str
-  name: str
-  role: str
-  phone: str 
 
 @router.post("/signup")
 def signup(data: SignupRequest):
@@ -39,11 +32,7 @@ def signup(data: SignupRequest):
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-class LoginRequest(BaseModel):
-  email: str
-  password: str
-
+      
 @router.post("/login")
 def login(data: LoginRequest):
   res = supabase.auth.sign_in_with_password({
