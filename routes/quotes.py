@@ -23,5 +23,5 @@ def get_quote(current_user = Depends(get_current_user)):
 
 @router.delete("/{quote_id}")
 def delet_quote(quote_id: str, current_user = Depends(get_current_user)):
-  supabase.table("quotes").delete().eq("id", quote_id).ep("user_id", current_user.id).execute()
+  supabase.table("quotes").delete().eq("id", quote_id).eq("user_id", current_user.id).execute()
   return {"message": "Quote Deleted"}
