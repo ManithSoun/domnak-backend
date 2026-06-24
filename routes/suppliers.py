@@ -38,7 +38,7 @@ def track_click(supplier_id: str, current_user = Depends(get_current_user)):
   res = supabase.table("referral_clicks").insert({
     "supplier_id": supplier_id,
     "user_id": current_user.id
-  }).excecute()
+  }).execute()
   return {"message": "Click tracked"}
 
 @router.patch("/{supplier_id}")
