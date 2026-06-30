@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from models.auth import SignupRequest, LoginRequest
-from services.supabase import supabase
+from db.supabase import supabase
 
 router = APIRouter()
 
@@ -23,9 +23,9 @@ def signup(data: SignupRequest):
         # Step 3 - insert into users table
         supabase.table("users").insert({
             "id": res.user.id,
-            "name": data.name,
+            "full_name": data.full_name,
             "role": data.role,
-            "phone": data.phone
+            "phone_number": data.phone_number
         }).execute()
 
         return {"message": "Signup successful", "user_id": res.user.id}
@@ -35,16 +35,28 @@ def signup(data: SignupRequest):
       
 @router.post("/login")
 def login(data: LoginRequest):
-  res = supabase.auth.sign_in_with_password({
-    "email": data.email,
-    "password": data.password
-  })
-  return {
-    "access_token": res.session.access_token,
-    "user_id": res.user.id
-  }
+  try:
+    res = supabase.auth.sign_in_with_password({
+      "email": data.email,
+      "password": data.password
+    })
+    profile = supabase.table("users").select("role, full_name").eq("id", res.user.id).single().execute()
+    return {
+      "access_token": res.session.access_token,
+      "user_id": res.user.id,
+      "role": profile.data["role"],
+      "full_name": profile.data["full_name"]
+    }
+
+
+  except Exception as e:
+    raise HTTPException(status_code=401, detail=str(e))
+  
 
 @router.get("/me")
 def get_me(user_id: str):
-  res = supabase.table("users").select("*").eq("id", user_id).single().execute()
-  return res.data
+  try:
+    res = supabase.table("users").select("*").eq("id", user_id).single().execute()
+    return res.data
+  except Exception as e:
+    raise HTTPException(status_code=404, detail=str(e))

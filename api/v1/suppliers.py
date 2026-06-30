@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer
-from services.supabase import supabase
+from db.supabase import supabase
 from models.suppliers import SupplierRequest
-from services.auth import get_current_user, get_admin_user
+from core.auth import get_current_user, get_admin_user
 from typing import Optional
 
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from models.quotes import QuoteRequest
-from services.supabase import supabase
-from services.auth import get_current_user
+from db.supabase import supabase
+from core.auth import get_current_user
 
 
 router = APIRouter()

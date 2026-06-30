@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from services.supabase import supabase
+from db.supabase import supabase
 from models.estimator import EstimatorRequest
 
 router = APIRouter()
