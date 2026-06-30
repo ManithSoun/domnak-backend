@@ -52,6 +52,21 @@ Health checks:
 - The service role key bypasses Supabase RLS — keep authorization checks in route handlers.
 - Run behind HTTPS with a reverse proxy or platform load balancer.
 
+## AI Integration
+
+The backend integrates with **Groq’s Llama 3.3 70B** model to provide intelligent construction cost assistance. All AI logic lives in the `ai/` folder.
+
+| Feature | Description |
+|---------|-------------|
+| **Quote Analysis** | Compares each line item against a reference price database and returns a risk status: `green` (≤5% above market), `amber` (5‑20% above), `red` (>20% above), or `unknown` if material not found. |
+| **Chatbot** | Streaming conversational assistant for construction queries (e.g., material advice, cost‑saving tips). |
+| **Floor Plan Reading** | Extracts text from PDFs and interprets dimensions, room counts, and material estimates (text‑based PDFs only). |
+| **Multi‑Quote Comparison** | Compares multiple quotes and identifies the best (cheapest) and worst (most expensive) option, along with deviation percentages. |
+
+**Environment variables required:** `GROQ_API_KEY` (get from [console.groq.com](https://console.groq.com)).
+
+**API endpoints:** See the API routes table below for `/api/analyze-quote`, `/api/chat`, and `/api/compare-quotes`.
+
 ## Tests and CI
 
 ```bash
@@ -70,3 +85,6 @@ GitHub Actions runs tests on push/PR to `main`.
 | `/api/estimator` | Cost estimation |
 | `/api/pdf` | PDF upload and parsing |
 | `/api/suppliers` | Supplier directory and referrals |
+| `/api/analyze-quote` | AI quote analysis (returns statuses) |
+| `/api/chat` | Streaming chat with AI assistant |
+| `/api/compare-quotes` | Compare multiple quotes (optional) |

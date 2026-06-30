@@ -1,0 +1,9 @@
+{
+  "name": "Quote 7 – Bulk Fair",
+  "line_items": [
+    {"material": "cement", "quantity": 500, "unit": "bag", "unit_price": 5.10},
+    {"material": "steel bar", "quantity": 1000, "unit": "kg", "unit_price": 1.15},
+    {"material": "sand", "quantity": 50, "unit": "cubic meter", "unit_price": 14.00},
+    {"material": "brick", "quantity": 2000, "unit": "piece", "unit_price": 0.49}
+  ]
+}

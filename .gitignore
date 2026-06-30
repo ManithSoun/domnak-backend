@@ -2,4 +2,5 @@ venv/
 __pycache__/
 *.pyc
 .env
-models/*.pkl
+models/*.pkl*.env
+ai/.env*
