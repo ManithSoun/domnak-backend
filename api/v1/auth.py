@@ -10,23 +10,18 @@ def signup(data: SignupRequest):
         # Step 1 - create auth user
         res = supabase.auth.sign_up({
             "email": data.email,
-            "password": data.password
+            "password": data.password,
+            "options": {
+              "data": {
+                "full_name": data.full_name,
+                "role": data.role,
+                "phone_number": data.phone_number
+              }
+            }
         })
 
         if res.user is None:
             raise HTTPException(status_code=400, detail="Signup failed")
-
-        # Step 2 - wait briefly then insert profile
-        import time
-        time.sleep(1)
-
-        # Step 3 - insert into users table
-        supabase.table("users").insert({
-            "id": res.user.id,
-            "full_name": data.full_name,
-            "role": data.role,
-            "phone_number": data.phone_number
-        }).execute()
 
         return {"message": "Signup successful", "user_id": res.user.id}
 
