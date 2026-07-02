@@ -1,11 +1,14 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from db.supabase import supabase
 from api.router import router
+from core.logging import logger
+import time
 
 app_kwargs = {
     "title": "Domnak API",
+    "version": "1.0.0",
     "swagger_ui_parameters": {"persistAuthorization": True}
 }
 
@@ -24,11 +27,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def log_rquests(request: Request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    duration = round((time.time() - start) * 1000)
+    logger.info(f"{request.method} {request.url.path} -> {response.status_code} ({duration}ms)")
+    return response
+
 app.include_router(router)
 
 @app.get("/")
 def root():
-    return {"status": "Domnak API running"}
+    return {"status": "Domnak API running", "version": "1.0.0"}
 
 @app.get("/health")
 def health():
@@ -45,8 +56,3 @@ def health_ready():
             status_code=503
         )
         
-from fastapi import Header
-
-@app.get("/test-auth")
-def test_auth(authorization: str = Header(None)):
-    return {"received": authorization}
