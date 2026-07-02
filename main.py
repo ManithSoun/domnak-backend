@@ -44,3 +44,9 @@ def health_ready():
             content=f'{{"status": "not ready", "database": "disconnected", "error": "{str(e)}"}}',
             status_code=503
         )
+        
+from fastapi import Header
+
+@app.get("/test-auth")
+def test_auth(authorization: str = Header(None)):
+    return {"received": authorization}
