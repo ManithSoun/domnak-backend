@@ -1,0 +1,24 @@
+{
+  "materials": [
+    {"material_name": "Cement", "khmer_name": "ស៊ីម៉ង់", "unit": "bag", "price_min_usd": 6.50, "price_max_usd": 7.50, "category": "structure"},
+    {"material_name": "Rebar", "khmer_name": "ដែកពង្រឹង", "unit": "ton", "price_min_usd": 820.00, "price_max_usd": 900.00, "category": "structure"},
+    {"material_name": "Sand", "khmer_name": "ខ្សាច់", "unit": "m³", "price_min_usd": 22.00, "price_max_usd": 28.00, "category": "structure"},
+    {"material_name": "Gravel", "khmer_name": "ថ្មកំទេច", "unit": "m³", "price_min_usd": 24.00, "price_max_usd": 30.00, "category": "structure"},
+    {"material_name": "Brick", "khmer_name": "ឥដ្ឋ", "unit": "pcs", "price_min_usd": 0.08, "price_max_usd": 0.10, "category": "structure"},
+    {"material_name": "Ceramic tile", "khmer_name": "ក្បឿងការ៉ូ", "unit": "m²", "price_min_usd": 6.00, "price_max_usd": 8.00, "category": "finishing"},
+    {"material_name": "PVC pipe", "khmer_name": "បំពង់ PVC", "unit": "meter", "price_min_usd": 2.00, "price_max_usd": 3.00, "category": "plumbing"},
+    {"material_name": "Electrical wire", "khmer_name": "កាប​លស្ទ", "unit": "meter", "price_min_usd": 0.70, "price_max_usd": 1.00, "category": "electrical"},
+    {"material_name": "Paint", "khmer_name": "ថ្នាំលាប", "unit": "liter", "price_min_usd": 2.50, "price_max_usd": 4.00, "category": "finishing"},
+    {"material_name": "Roof tile", "khmer_name": "ក្បឿងដំបូល", "unit": "pcs", "price_min_usd": 0.50, "price_max_usd": 0.80, "category": "roofing"},
+    {"material_name": "Steel door", "khmer_name": "ទ្វារដែក", "unit": "set", "price_min_usd": 80.00, "price_max_usd": 150.00, "category": "finishing"},
+    {"material_name": "Wood door", "khmer_name": "ទ្វារឈើ", "unit": "set", "price_min_usd": 60.00, "price_max_usd": 120.00, "category": "finishing"},
+    {"material_name": "Window", "khmer_name": "បង្អួច", "unit": "set", "price_min_usd": 40.00, "price_max_usd": 100.00, "category": "finishing"},
+    {"material_name": "Concrete block", "khmer_name": "ឥដ្ឋបេតុង", "unit": "pcs", "price_min_usd": 0.30, "price_max_usd": 0.50, "category": "structure"},
+    {"material_name": "Plywood", "khmer_name": "ក្តារប្លង់", "unit": "pcs", "price_min_usd": 8.00, "price_max_usd": 15.00, "category": "structure"},
+    {"material_name": "Roofing sheet", "khmer_name": "ស្លឹកដំបូល", "unit": "pcs", "price_min_usd": 5.00, "price_max_usd": 10.00, "category": "roofing"},
+    {"material_name": "Water pipe", "khmer_name": "បំពង់ទឹក", "unit": "meter", "price_min_usd": 1.50, "price_max_usd": 2.50, "category": "plumbing"},
+    {"material_name": "Electrical conduit", "khmer_name": "បំពង់ភ្លើង", "unit": "meter", "price_min_usd": 0.50, "price_max_usd": 1.00, "category": "electrical"},
+    {"material_name": "Floor tile", "khmer_name": "ក្បឿងឥដ្ឋ", "unit": "m²", "price_min_usd": 5.00, "price_max_usd": 9.00, "category": "finishing"},
+    {"material_name": "Wall tile", "khmer_name": "ក្បឿងជញ្ជាំង", "unit": "m²", "price_min_usd": 5.00, "price_max_usd": 10.00, "category": "finishing"}
+  ]
+}
