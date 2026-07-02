@@ -1,4 +1,5 @@
 from pydantic import BaseModel, field_validator
+from db.supabase import supabase
 
 class EstimatorRequest(BaseModel):
     floor_area: float
