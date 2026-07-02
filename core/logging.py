@@ -1,16 +1,29 @@
 import logging
 import sys
-from datetime import datetime
+import os
+
+os.makedirs("logs", exist_ok=True)
 
 def setup_logging():
-  logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s |  %(name)s | %(message)s",
-    handlers=[
-      logging.StreamHandler(sys.stdout),
-      logging.FileHandler(f"logs/app.log")
-    ]
-  )
-  return logging.getLogger("domnak")
+    logger = logging.getLogger("domnak")
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+
+    # File handler
+    file_handler = logging.FileHandler("logs/app.log")
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+
+    return logger
 
 logger = setup_logging()

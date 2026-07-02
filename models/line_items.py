@@ -3,28 +3,28 @@ from typing import Optional
 
 class BaseLineItemRequest(BaseModel):
 
-    @field_validator('quantity', mode='before')
+    @field_validator('quantity', mode='before', check_fields=False)
     @classmethod
     def validate_quantity(cls, value):
         if value is not None and value <= 0:
             raise ValueError("Quantity must be greater than 0")
         return value
 
-    @field_validator('unit_price', mode='before')
+    @field_validator('unit_price', mode='before', check_fields=False)
     @classmethod
     def validate_unit_price(cls, value):
         if value is not None and value <= 0:
             raise ValueError("Unit price must be greater than 0")
         return value
 
-    @field_validator('total_price', mode='before')
+    @field_validator('total_price', mode='before', check_fields=False)
     @classmethod
     def validate_total_price(cls, value):
         if value is not None and value <= 0:
             raise ValueError("Total price must be greater than 0")
         return value
 
-    @field_validator('unit', mode='before')
+    @field_validator('unit', mode='before', check_fields=False)
     @classmethod
     def validate_unit(cls, value):
         if value is None:

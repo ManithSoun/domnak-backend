@@ -5,7 +5,7 @@ from typing import Optional
 
 class BaseSupplierRequest(BaseModel):
 
-    @field_validator('full_name', mode='before')
+    @field_validator('full_name', mode='before', check_fields=False)
     @classmethod
     def validate_full_name(cls, value):
         if value is None:
@@ -16,7 +16,7 @@ class BaseSupplierRequest(BaseModel):
             raise ValueError('Name must be less than 100 characters')
         return value
 
-    @field_validator('material_name', mode='before')
+    @field_validator('material_name', mode='before', check_fields=False)
     @classmethod
     def validate_material_name(cls, value):
         if value is None:
@@ -25,7 +25,7 @@ class BaseSupplierRequest(BaseModel):
             raise ValueError('Material name must be at least 2 characters')
         return value
 
-    @field_validator('location', mode='before')
+    @field_validator('location', mode='before', check_fields=False)
     @classmethod
     def validate_location(cls, value):
         if value is None:
@@ -34,7 +34,7 @@ class BaseSupplierRequest(BaseModel):
             raise ValueError('Location must be at least 3 characters')
         return value
 
-    @field_validator('phone_number', mode='before')
+    @field_validator('phone_number', mode='before', check_fields=False)
     @classmethod
     def validate_phone(cls, value):
         if value is None:
@@ -47,7 +47,7 @@ class BaseSupplierRequest(BaseModel):
         except NumberParseException:
             raise ValueError("Phone number format is invalid. Example: 012345678 or +85512345678")
 
-    @field_validator('price_per_unit', mode='before')
+    @field_validator('price_per_unit', mode='before', check_fields=False)
     @classmethod
     def validate_price(cls, value):
         if value is None:
@@ -56,7 +56,7 @@ class BaseSupplierRequest(BaseModel):
             raise ValueError("Price must be greater than 0")
         return value
 
-    @field_validator('unit', mode='before')
+    @field_validator('unit', mode='before', check_fields=False)
     @classmethod
     def validate_unit(cls, value):
         if value is None:
