@@ -1,0 +1,95 @@
+{
+  "materials": [
+    { "material_name": "cement", "price_min_usd": 6.00, "price_max_usd": 7.50, "unit": "bag" },
+    { "material_name": "white cement", "price_min_usd": 9.00, "price_max_usd": 12.00, "unit": "bag" },
+    { "material_name": "ready-mix concrete", "price_min_usd": 58.00, "price_max_usd": 88.00, "unit": "m³" },
+    { "material_name": "concrete pump service", "price_min_usd": 40.00, "price_max_usd": 70.00, "unit": "hour" },
+
+    { "material_name": "sand", "price_min_usd": 40.00, "price_max_usd": 50.00, "unit": "m³" },
+    { "material_name": "fine sand", "price_min_usd": 45.00, "price_max_usd": 55.00, "unit": "m³" },
+    { "material_name": "gravel", "price_min_usd": 35.00, "price_max_usd": 45.00, "unit": "m³" },
+    { "material_name": "crushed stone", "price_min_usd": 38.00, "price_max_usd": 48.00, "unit": "m³" },
+    { "material_name": "laterite", "price_min_usd": 30.00, "price_max_usd": 40.00, "unit": "m³" },
+
+    { "material_name": "steel", "price_min_usd": 1.10, "price_max_usd": 1.35, "unit": "kg" },
+    { "material_name": "rebar 6mm", "price_min_usd": 0.95, "price_max_usd": 1.15, "unit": "kg" },
+    { "material_name": "rebar 10mm", "price_min_usd": 1.00, "price_max_usd": 1.20, "unit": "kg" },
+    { "material_name": "rebar 12mm", "price_min_usd": 1.05, "price_max_usd": 1.25, "unit": "kg" },
+    { "material_name": "rebar 16mm", "price_min_usd": 1.10, "price_max_usd": 1.30, "unit": "kg" },
+    { "material_name": "wire mesh", "price_min_usd": 2.50, "price_max_usd": 3.50, "unit": "roll" },
+    { "material_name": "binding wire", "price_min_usd": 1.20, "price_max_usd": 1.80, "unit": "kg" },
+    { "material_name": "steel column (H-beam)", "price_min_usd": 700.00, "price_max_usd": 850.00, "unit": "ton" },
+
+    { "material_name": "brick", "price_min_usd": 0.22, "price_max_usd": 0.28, "unit": "pcs" },
+    { "material_name": "hollow block", "price_min_usd": 0.35, "price_max_usd": 0.50, "unit": "pcs" },
+    { "material_name": "concrete block", "price_min_usd": 0.45, "price_max_usd": 0.65, "unit": "pcs" },
+    { "material_name": "AAC block", "price_min_usd": 1.20, "price_max_usd": 1.60, "unit": "pcs" },
+
+    { "material_name": "plywood", "price_min_usd": 12.00, "price_max_usd": 18.00, "unit": "pcs" },
+    { "material_name": "marine plywood", "price_min_usd": 22.00, "price_max_usd": 30.00, "unit": "pcs" },
+    { "material_name": "timber (pine)", "price_min_usd": 3.50, "price_max_usd": 5.00, "unit": "meter" },
+    { "material_name": "hardwood timber", "price_min_usd": 8.00, "price_max_usd": 14.00, "unit": "meter" },
+    { "material_name": "MDF board", "price_min_usd": 10.00, "price_max_usd": 15.00, "unit": "pcs" },
+
+    { "material_name": "paint", "price_min_usd": 3.50, "price_max_usd": 4.50, "unit": "liter" },
+    { "material_name": "exterior paint", "price_min_usd": 5.00, "price_max_usd": 7.00, "unit": "liter" },
+    { "material_name": "primer", "price_min_usd": 3.00, "price_max_usd": 4.00, "unit": "liter" },
+    { "material_name": "putty/skim coat", "price_min_usd": 4.00, "price_max_usd": 6.00, "unit": "bag" },
+    { "material_name": "waterproofing membrane", "price_min_usd": 8.00, "price_max_usd": 14.00, "unit": "m²" },
+    { "material_name": "waterproof coating", "price_min_usd": 5.00, "price_max_usd": 8.00, "unit": "liter" },
+    { "material_name": "insulation board", "price_min_usd": 4.00, "price_max_usd": 7.00, "unit": "m²" },
+
+    { "material_name": "tiles", "price_min_usd": 10.00, "price_max_usd": 15.00, "unit": "m²" },
+    { "material_name": "porcelain tiles", "price_min_usd": 14.00, "price_max_usd": 22.00, "unit": "m²" },
+    { "material_name": "granite tiles", "price_min_usd": 18.00, "price_max_usd": 30.00, "unit": "m²" },
+    { "material_name": "marble tiles", "price_min_usd": 25.00, "price_max_usd": 45.00, "unit": "m²" },
+    { "material_name": "tile adhesive", "price_min_usd": 6.00, "price_max_usd": 9.00, "unit": "bag" },
+    { "material_name": "tile grout", "price_min_usd": 3.00, "price_max_usd": 5.00, "unit": "kg" },
+
+    { "material_name": "roofing sheet", "price_min_usd": 8.00, "price_max_usd": 11.00, "unit": "m²" },
+    { "material_name": "metal roofing sheet", "price_min_usd": 9.00, "price_max_usd": 13.00, "unit": "m²" },
+    { "material_name": "clay roof tile", "price_min_usd": 0.80, "price_max_usd": 1.20, "unit": "pcs" },
+    { "material_name": "roof insulation foil", "price_min_usd": 2.00, "price_max_usd": 3.50, "unit": "m²" },
+    { "material_name": "gutter", "price_min_usd": 5.00, "price_max_usd": 8.00, "unit": "meter" },
+    { "material_name": "roof truss (steel)", "price_min_usd": 15.00, "price_max_usd": 25.00, "unit": "meter" },
+
+    { "material_name": "PVC pipe", "price_min_usd": 2.50, "price_max_usd": 4.50, "unit": "meter" },
+    { "material_name": "PVC fitting", "price_min_usd": 0.50, "price_max_usd": 1.50, "unit": "pcs" },
+    { "material_name": "water tank", "price_min_usd": 80.00, "price_max_usd": 150.00, "unit": "pcs" },
+    { "material_name": "septic tank", "price_min_usd": 150.00, "price_max_usd": 300.00, "unit": "pcs" },
+    { "material_name": "faucet", "price_min_usd": 8.00, "price_max_usd": 20.00, "unit": "pcs" },
+    { "material_name": "toilet", "price_min_usd": 60.00, "price_max_usd": 150.00, "unit": "pcs" },
+    { "material_name": "sink", "price_min_usd": 30.00, "price_max_usd": 80.00, "unit": "pcs" },
+
+    { "material_name": "electrical wire", "price_min_usd": 0.40, "price_max_usd": 0.70, "unit": "meter" },
+    { "material_name": "electrical conduit", "price_min_usd": 0.50, "price_max_usd": 0.90, "unit": "meter" },
+    { "material_name": "circuit breaker (MCB)", "price_min_usd": 4.00, "price_max_usd": 8.00, "unit": "pcs" },
+    { "material_name": "electrical panel box", "price_min_usd": 20.00, "price_max_usd": 45.00, "unit": "pcs" },
+    { "material_name": "light switch", "price_min_usd": 1.50, "price_max_usd": 3.50, "unit": "pcs" },
+    { "material_name": "power outlet", "price_min_usd": 1.50, "price_max_usd": 3.50, "unit": "pcs" },
+    { "material_name": "LED light fixture", "price_min_usd": 5.00, "price_max_usd": 15.00, "unit": "pcs" },
+
+    { "material_name": "wooden door", "price_min_usd": 60.00, "price_max_usd": 150.00, "unit": "pcs" },
+    { "material_name": "steel door", "price_min_usd": 80.00, "price_max_usd": 180.00, "unit": "pcs" },
+    { "material_name": "aluminum window frame", "price_min_usd": 40.00, "price_max_usd": 90.00, "unit": "m²" },
+    { "material_name": "glass window", "price_min_usd": 20.00, "price_max_usd": 40.00, "unit": "m²" },
+    { "material_name": "tempered glass", "price_min_usd": 35.00, "price_max_usd": 60.00, "unit": "m²" },
+    { "material_name": "door hinge", "price_min_usd": 1.00, "price_max_usd": 3.00, "unit": "pcs" },
+    { "material_name": "door lock/handle set", "price_min_usd": 8.00, "price_max_usd": 25.00, "unit": "set" },
+
+    { "material_name": "ceiling gypsum board", "price_min_usd": 6.00, "price_max_usd": 9.00, "unit": "pcs" },
+    { "material_name": "ceiling frame (metal furring)", "price_min_usd": 1.50, "price_max_usd": 2.50, "unit": "meter" },
+    { "material_name": "PVC ceiling panel", "price_min_usd": 4.00, "price_max_usd": 7.00, "unit": "m²" },
+
+    { "material_name": "nails", "price_min_usd": 1.00, "price_max_usd": 1.50, "unit": "kg" },
+    { "material_name": "screws", "price_min_usd": 1.50, "price_max_usd": 2.50, "unit": "kg" },
+    { "material_name": "adhesive/glue", "price_min_usd": 3.00, "price_max_usd": 6.00, "unit": "liter" },
+    { "material_name": "silicone sealant", "price_min_usd": 3.00, "price_max_usd": 5.00, "unit": "pcs" },
+
+    { "material_name": "skilled labor", "price_min_usd": 20.00, "price_max_usd": 30.00, "unit": "hour" },
+    { "material_name": "general labor", "price_min_usd": 10.00, "price_max_usd": 18.00, "unit": "hour" },
+    { "material_name": "electrician labor", "price_min_usd": 25.00, "price_max_usd": 35.00, "unit": "hour" },
+    { "material_name": "plumber labor", "price_min_usd": 22.00, "price_max_usd": 32.00, "unit": "hour" },
+    { "material_name": "painter labor", "price_min_usd": 15.00, "price_max_usd": 25.00, "unit": "hour" }
+  ]
+}
