@@ -1,0 +1,31 @@
+from db.supabase import supabase
+from datetime import datetime
+
+def create_quote(user_id, contractor_name, total_amount):
+    data = {
+        "user_id": user_id,
+        "contractor_name": contractor_name,
+        "total_amount": total_amount,
+        "status": "pending",
+        "quality_tier": "standard",
+        "created_at": datetime.now().isoformat()
+    }
+    result = supabase.table("quotes").insert(data).execute()
+    return result.data[0] if result.data else None
+
+def get_quote(user_id):
+    result = supabase.table("quotes").select("*").eq("user_id", user_id).execute()
+    return result.data if result.data else []
+
+def update_quote(quote_id, user_id, contractor_name, total_amount):
+    data = {
+        "contractor_name": contractor_name,
+        "total_amount": total_amount,
+        "updated_at": datetime.now().isoformat()
+    }
+    result = supabase.table("quotes").update(data).eq("id", quote_id).eq("user_id", user_id).execute()
+    return result.data[0] if result.data else None
+
+def delete_quote(quote_id, user_id):
+    result = supabase.table("quotes").delete().eq("id", quote_id).eq("user_id", user_id).execute()
+    return result.data[0] if result.data else None

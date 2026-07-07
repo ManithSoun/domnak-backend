@@ -15,7 +15,7 @@ def create_quote(data: QuoteRequest, current_user = Depends(get_current_user)):
     except Exception as e:
         return error(message=str(e), status_code=500)
 
-@router.get("/")
+@router.get("/all")
 def get_quotes(current_user = Depends(get_current_user)):
     try:
         result = quote_crud.get_quote(current_user.id)
@@ -30,17 +30,6 @@ def get_quote(quote_id: str, current_user = Depends(get_current_user)):
         if not quote.data or len(quote.data) == 0:
             return error(message="Quote not found or access denied", status_code=403)
         return success(data=quote.data[0])
-    except Exception as e:
-        return error(message=str(e), status_code=500)
-
-@router.delete("/{quote_id}")
-def delete_quote(quote_id: str, current_user = Depends(get_current_user)):
-    try:
-        quote = supabase.table("quotes").select("id").eq("id", quote_id).eq("user_id", current_user.id).execute()
-        if not quote.data or len(quote.data) == 0:
-            return error(message="Quote not found or access denied", status_code=403)
-        quote_crud.delete_quote(quote_id, current_user.id)
-        return success(message="Quote deleted")
     except Exception as e:
         return error(message=str(e), status_code=500)
 
@@ -60,12 +49,19 @@ def update_quote(quote_id: str, data: QuoteUpdateRequest, current_user = Depends
     except Exception as e:
         return error(message=str(e), status_code=500)
 
+@router.delete("/{quote_id}")
+def delete_quote(quote_id: str, current_user = Depends(get_current_user)):
+    try:
+        quote = supabase.table("quotes").select("id").eq("id", quote_id).eq("user_id", current_user.id).execute()
+        if not quote.data or len(quote.data) == 0:
+            return error(message="Quote not found or access denied", status_code=403)
+        quote_crud.delete_quote(quote_id, current_user.id)
+        return success(message="Quote deleted")
+    except Exception as e:
+        return error(message=str(e), status_code=500)
+
 @router.get("/{quote_id}/share")
-def get_shareable_link(
-    quote_id: str,
-    current_user = Depends(get_current_user)
-):
-    """Generate a shareable link for a quote"""
+def get_shareable_link(quote_id: str, current_user = Depends(get_current_user)):
     try:
         quote = supabase.table("quotes").select("*").eq("id", quote_id).eq("user_id", current_user.id).execute()
         if not quote.data or len(quote.data) == 0:

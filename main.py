@@ -1,44 +1,58 @@
-from fastapi import FastAPI, Header
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends
 from fastapi.security import HTTPBearer
-from services.supabase import supabase
-from routes.auth import router as auth_router
+from fastapi.middleware.cors import CORSMiddleware
 from routes.quotes import router as quote_router
 from routes.line_items import router as line_items_router
 from routes.estimator import router as estimator_router
-from routes.pdf import router as pdf_router
-from routes.suppliers import router as suppliers_router
+from routes.auth import router as auth_router
+from routes import chat
+from core.auth import get_current_user
+import os
+from dotenv import load_dotenv
 
-security = HTTPBearer()
+load_dotenv()
 
 app = FastAPI(
     title="Domnak API",
-    swagger_ui_parameters={"persistAuthorization": True}
+    description="Construction Cost Estimator API",
+    version="1.0.0"
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth_router, prefix="/api/auth")
-app.include_router(quote_router, prefix="/api/quotes")
-app.include_router(line_items_router, prefix="/api/line-items")
-app.include_router(estimator_router, prefix="/api/estimator")
-app.include_router(pdf_router, prefix="/api/pdf")
-app.include_router(suppliers_router, prefix="/api/suppliers")
+app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
+app.include_router(quote_router, prefix="/api/quotes", tags=["Quotes"])
+app.include_router(line_items_router, prefix="/api/line-items", tags=["Line Items"])
+app.include_router(estimator_router, prefix="/api/estimator", tags=["Estimator"])
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 
 @app.get("/")
 def root():
     return {"status": "Domnak API running"}
 
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
+@app.get("/health/ready")
+def health_ready():
+    return {"status": "ready"}
+
 @app.get("/test-db")
 def test_db():
-    data = supabase.table("suppliers").select("*").execute()
-    return {"connected": True, "rows": len(data.data)}
+    from db.supabase import supabase
+    try:
+        result = supabase.table("quotes").select("count").execute()
+        return {"status": "connected", "count": result.count}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 @app.get("/test-token")
-def test_token(authorization: str = Header(None)):
+def test_token(authorization: str = Depends(HTTPBearer())):
     return {"received": authorization}
