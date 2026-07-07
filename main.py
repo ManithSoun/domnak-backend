@@ -10,6 +10,9 @@ from core.auth import get_current_user
 import os
 from dotenv import load_dotenv
 
+# Import floor_plan router
+from api.v1.floor_plan import router as floor_plan_router
+
 load_dotenv()
 
 app = FastAPI(
@@ -31,6 +34,9 @@ app.include_router(quote_router, prefix="/api/quotes", tags=["Quotes"])
 app.include_router(line_items_router, prefix="/api/line-items", tags=["Line Items"])
 app.include_router(estimator_router, prefix="/api/estimator", tags=["Estimator"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+
+# Add floor_plan router
+app.include_router(floor_plan_router, prefix="/api/v1/floor-plan", tags=["Floor Plan"])
 
 @app.get("/")
 def root():
