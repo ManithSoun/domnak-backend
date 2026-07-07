@@ -11,7 +11,6 @@ router = APIRouter()
 @router.post("/")
 def create_quote(data: QuoteRequest, current_user = Depends(get_current_user)):
     try:
-        # current_user is a dict, access with ['id'] or .get()
         user_id = current_user.get('id') or current_user['id']
         result = quote_crud.create_quote(user_id, data.contractor_name, data.total_amount)
         return success(data=result)
@@ -33,6 +32,18 @@ def get_quotes(
         else:
             result = quote_crud.get_quote(user_id)
             return success(data=result)
+    except Exception as e:
+        return error(message=str(e), status_code=500)
+
+# 🔥 FIX: Added GET method for single quote
+@router.get("/{quote_id}")
+def get_single_quote(quote_id: str, current_user = Depends(get_current_user)):
+    try:
+        user_id = current_user.get('id') or current_user['id']
+        quote = supabase.table("quotes").select("*").eq("id", quote_id).eq("user_id", user_id).execute()
+        if not quote.data or len(quote.data) == 0:
+            return error(message="Quote not found or access denied", status_code=403)
+        return success(data=quote.data[0])
     except Exception as e:
         return error(message=str(e), status_code=500)
 
