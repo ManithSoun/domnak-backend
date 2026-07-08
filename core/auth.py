@@ -2,12 +2,11 @@ from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from db.supabase import supabase
 
-security = HTTPBearer(auto_error=False)  # ← add auto_error=False
+security = HTTPBearer(auto_error=False)
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     if not credentials:
         raise HTTPException(status_code=401, detail="Missing or invalid token")
-    
     token = credentials.credentials
     try:
         res = supabase.auth.get_user(token)

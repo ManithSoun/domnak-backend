@@ -1,0 +1,9 @@
+{
+  "name": "Quote 9 – Budget",
+  "line_items": [
+    {"material": "cement", "quantity": 100, "unit": "bag", "unit_price": 4.00},
+    {"material": "brick", "quantity": 500, "unit": "piece", "unit_price": 0.40},
+    {"material": "sand", "quantity": 10, "unit": "cubic meter", "unit_price": 12.00},
+    {"material": "pipe (PVC)", "quantity": 50, "unit": "meter", "unit_price": 1.80}
+  ]
+}

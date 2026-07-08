@@ -1,0 +1,22 @@
+[
+  {"material": "cement", "unit": "bag", "avg_price": 5.00},
+  {"material": "steel bar", "unit": "kg", "avg_price": 1.20},
+  {"material": "paint (interior)", "unit": "gallon", "avg_price": 25.00},
+  {"material": "paint (exterior)", "unit": "gallon", "avg_price": 28.00},
+  {"material": "brick", "unit": "piece", "avg_price": 0.50},
+  {"material": "sand", "unit": "cubic meter", "avg_price": 15.00},
+  {"material": "gravel", "unit": "cubic meter", "avg_price": 18.00},
+  {"material": "wood (plywood)", "unit": "sheet", "avg_price": 12.00},
+  {"material": "tile (ceramic)", "unit": "sqm", "avg_price": 10.00},
+  {"material": "tile (porcelain)", "unit": "sqm", "avg_price": 15.00},
+  {"material": "roofing sheet", "unit": "piece", "avg_price": 8.00},
+  {"material": "insulation", "unit": "roll", "avg_price": 30.00},
+  {"material": "pipe (PVC)", "unit": "meter", "avg_price": 2.00},
+  {"material": "wire (copper)", "unit": "meter", "avg_price": 1.50},
+  {"material": "switch", "unit": "piece", "avg_price": 3.00},
+  {"material": "outlet", "unit": "piece", "avg_price": 2.50},
+  {"material": "light fixture", "unit": "piece", "avg_price": 15.00},
+  {"material": "door (wooden)", "unit": "piece", "avg_price": 100.00},
+  {"material": "window (aluminum)", "unit": "piece", "avg_price": 80.00},
+  {"material": "glass", "unit": "sqm", "avg_price": 25.00}
+]
