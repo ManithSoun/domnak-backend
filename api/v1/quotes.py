@@ -15,7 +15,7 @@ def create_quote(data: QuoteRequest, current_user = Depends(get_current_user)):
     except Exception as e:
         return error(message=str(e), status_code=500)
 
-@router.get("/all")
+@router.get("/")
 def get_quotes(current_user = Depends(get_current_user)):
     try:
         result = quote_crud.get_quote(current_user.id)

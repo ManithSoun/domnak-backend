@@ -1,12 +1,14 @@
-import os
-from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
 
-load_dotenv()
+class Settings(BaseSettings):
+    supabase_url: str
+    supabase_service_key: str
+    groq_api_key: str
+    environment: str = "development"
+    frontend_url: str = "http://localhost:3000"
 
-class Settings:
-    SUPABASE_URL = os.getenv("SUPABASE_URL")
-    SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-    JWT_SECRET = os.getenv("JWT_SECRET", "supersecret")
-    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
 settings = Settings()

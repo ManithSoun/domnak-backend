@@ -1,13 +1,8 @@
-import os
-from supabase import create_client, Client
+from supabase import create_client
 from dotenv import load_dotenv
+from config import settings
 
-load_dotenv()
-
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
-
-if not url or not key:
-    raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in .env")
-
-supabase: Client = create_client(url, key)
+supabase = create_client(
+    settings.supabase_url,
+    settings.supabase_service_key
+)
