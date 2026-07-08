@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.v1 import analysis, auth, quotes, line_items, estimator, pdf, suppliers
+from api.v1 import analysis, auth, quotes, line_items, estimator, pdf, suppliers, chat, floor_plan, boq
 
 router = APIRouter(prefix="/api/v1")
 
@@ -10,4 +10,5 @@ router.include_router(estimator.router, prefix="/estimator", tags=["Estimator"])
 router.include_router(pdf.router, prefix="/pdf", tags=["PDF"])
 router.include_router(suppliers.router, prefix="/suppliers", tags=["Suppliers"])
 router.include_router(analysis.router, prefix="/analysis", tags=["analysis"])
-# router.include_router(chat.router, prefix="/chat", tags=["Chat"])
+router.include_router(chat.router, prefix="/chat", tags=["Chat"])
+router.include_router(floor_plan_router, prefix="/floor-plan", tags=["Floor Plan"])
