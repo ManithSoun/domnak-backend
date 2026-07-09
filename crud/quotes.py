@@ -1,29 +1,39 @@
 from db.supabase import supabase
+from datetime import datetime
 
-def create_quote(user_id: str, contractor_name: str, total_amount: float, quality_tier: str = "standard"):
-    res = supabase.table("quotes").insert({
+def create_quote(user_id, contractor_name, total_amount):
+    data = {
         "user_id": user_id,
         "contractor_name": contractor_name,
         "total_amount": total_amount,
-        "quality_tier": quality_tier
-    }).execute()
-    return res.data
+        "status": "pending",
+        "quality_tier": "standard",
+        "created_at": datetime.now().isoformat()
+    }
+    result = supabase.table("quotes").insert(data).execute()
+    
+    # Return the first item from data array
+    if result.data and len(result.data) > 0:
+        return result.data[0]
+    return None
 
-def get_quote(user_id: str):
-    res = supabase.table("quotes").select("*").eq("user_id", user_id).execute()
-    return res.data
+def get_quote(user_id):
+    result = supabase.table("quotes").select("*").eq("user_id", user_id).execute()
+    return result.data if result.data else []
 
-def delete_quote(quote_id: str, user_id: str):
-    res = supabase.table("quotes").delete().eq("id", quote_id).eq("user_id", user_id).execute()
-    return res.data
+def update_quote(quote_id, user_id, contractor_name, total_amount):
+    data = {
+        "contractor_name": contractor_name,
+        "total_amount": total_amount,
+        "updated_at": datetime.now().isoformat()
+    }
+    result = supabase.table("quotes").update(data).eq("id", quote_id).eq("user_id", user_id).execute()
+    if result.data and len(result.data) > 0:
+        return result.data[0]
+    return None
 
-def update_quote(quote_id: str, user_id: str, contractor_name: str = None, total_amount: float = None, quality_tier: str = None):
-    updates = {}
-    if contractor_name is not None:
-        updates["contractor_name"] = contractor_name
-    if total_amount is not None:
-        updates["total_amount"] = total_amount
-    if quality_tier is not None:
-        updates["quality_tier"] = quality_tier
-    res = supabase.table("quotes").update(updates).eq("id", quote_id).eq("user_id", user_id).execute()
-    return res.data
+def delete_quote(quote_id, user_id):
+    result = supabase.table("quotes").delete().eq("id", quote_id).eq("user_id", user_id).execute()
+    if result.data and len(result.data) > 0:
+        return result.data[0]
+    return None

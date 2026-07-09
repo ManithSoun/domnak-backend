@@ -1,11 +1,26 @@
-# services/groq_chat.py
 import os
 from groq import Groq
-from typing import AsyncGenerator, List, Dict
+from typing import AsyncGenerator, List, Dict, Optional
+from dotenv import load_dotenv
+import sys
+
+# Force load .env from project root
+load_dotenv()
 
 class GroqChatService:
     def __init__(self, quote_context: dict = None):
-        self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        # Try multiple ways to get the API key
+        self.api_key = os.getenv("GROQ_API_KEY")
+        
+        # If still not found, try loading .env explicitly
+        if not self.api_key:
+            load_dotenv(override=True)
+            self.api_key = os.getenv("GROQ_API_KEY")
+        
+        if not self.api_key:
+            raise ValueError("GROQ_API_KEY not found in .env file. Please check your .env configuration.")
+        
+        self.client = Groq(api_key=self.api_key)
         self.model = "llama-3.3-70b-versatile"
         self.quote_context = quote_context or {}
     

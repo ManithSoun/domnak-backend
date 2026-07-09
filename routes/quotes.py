@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/")
 def create_quote(data: QuoteRequest, current_user = Depends(get_current_user)):
     try:
-        # Use dictionary key access
+        # Access user_id as dictionary key
         user_id = current_user["id"]
         result = quote_crud.create_quote(user_id, data.contractor_name, data.total_amount)
         return success(data=result)
