@@ -7,3 +7,8 @@ phonenumbers
 pydantic-settings
 python-dotenv
 python-multipart
+Pillow
+pytesseract
+requests
+reportlab
+pydantic
