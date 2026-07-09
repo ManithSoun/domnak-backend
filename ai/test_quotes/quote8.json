@@ -1,9 +1,0 @@
-{
-  "name": "Quote 8 – Luxury",
-  "line_items": [
-    {"material": "tile (porcelain)", "quantity": 100, "unit": "sqm", "unit_price": 18.00},
-    {"material": "wood (plywood)", "quantity": 50, "unit": "sheet", "unit_price": 14.00},
-    {"material": "glass", "quantity": 30, "unit": "sqm", "unit_price": 30.00},
-    {"material": "paint (exterior)", "quantity": 20, "unit": "gallon", "unit_price": 32.00}
-  ]
-}

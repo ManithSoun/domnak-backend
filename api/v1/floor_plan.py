@@ -140,3 +140,23 @@ def get_floor_plan(
         
     except Exception as e:
         return error(message=str(e), status_code=500)
+
+@router.delete("/{floor_plan_id}")
+def delete_floor_plan(
+    floor_plan_id: str,
+    current_user = Depends(get_current_user)
+):
+    """Delete a floor plan"""
+    try:
+        # Check if floor plan exists and belongs to user
+        result = supabase.table("floor_plans").select("id").eq("id", floor_plan_id).eq("user_id", current_user["id"]).execute()
+        if not result.data or len(result.data) == 0:
+            return error(message="Floor plan not found or access denied", status_code=404)
+        
+        # Delete the floor plan
+        supabase.table("floor_plans").delete().eq("id", floor_plan_id).eq("user_id", current_user["id"]).execute()
+        
+        return success(message="Floor plan deleted successfully")
+        
+    except Exception as e:
+        return error(message=str(e), status_code=500)

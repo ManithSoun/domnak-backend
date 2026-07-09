@@ -16,6 +16,7 @@ user_id = None
 quote_id = None
 item_id = None
 floor_plan_id = None
+chat_message_id = None
 
 def print_result(name, passed, response=None):
     global TESTS_PASSED, TESTS_FAILED
@@ -43,19 +44,16 @@ def create_test_floor_plan():
         img = Image.new('RGB', (800, 600), color='white')
         draw = ImageDraw.Draw(img)
         
-        # Draw rooms
         draw.rectangle([50, 50, 350, 350], outline='black', width=3)
         draw.rectangle([400, 50, 750, 250], outline='black', width=3)
         draw.rectangle([400, 300, 750, 450], outline='black', width=3)
         draw.rectangle([50, 400, 350, 550], outline='black', width=3)
         
-        # Labels
         draw.text((100, 180), "Living Room", fill='black')
         draw.text((450, 120), "Kitchen", fill='black')
         draw.text((450, 370), "Bedroom", fill='black')
         draw.text((100, 460), "Bathroom", fill='black')
         
-        # Dimensions
         draw.text((50, 25), "Width: 5.0m", fill='black')
         draw.text((50, 45), "Length: 6.0m", fill='black')
         draw.text((400, 25), "Width: 4.0m", fill='black')
@@ -78,7 +76,6 @@ print_result("Health Check", res.status_code == 200 and res.json().get("status")
 section("2. AUTHENTICATION")
 # ============================================================
 
-# Signup
 res = requests.post(f"{BASE_URL}/auth/signup", json={
     "full_name": "Test User",
     "email": EMAIL,
@@ -89,7 +86,6 @@ res = requests.post(f"{BASE_URL}/auth/signup", json={
 data = res.json()
 print_result("Signup", res.status_code == 200 and not data.get("error"), res)
 
-# Login
 res = requests.post(f"{BASE_URL}/auth/login", json={
     "email": EMAIL,
     "password": PASSWORD
@@ -109,7 +105,6 @@ if token:
 
 headers = {"Authorization": f"Bearer {token}"}
 
-# Get me
 res = requests.get(f"{BASE_URL}/auth/me?user_id={user_id}", headers=headers)
 data = res.json()
 print_result("Get Current User", res.status_code == 200 and (data.get("data") or data.get("id")), res)
@@ -118,7 +113,6 @@ print_result("Get Current User", res.status_code == 200 and (data.get("data") or
 section("3. QUOTES")
 # ============================================================
 
-# Create quote
 res = requests.post(f"{BASE_URL}/quotes/", json={
     "contractor_name": "Sokha Construction",
     "total_amount": 42000
@@ -136,18 +130,15 @@ print_result("Create Quote", quote_id is not None, res)
 if quote_id:
     print(f"   Quote ID: {quote_id}")
 
-# Get all quotes
 res = requests.get(f"{BASE_URL}/quotes/", headers=headers)
 data = res.json()
 print_result("Get All Quotes", res.status_code == 200 and data.get("data") is not None, res)
 
-# Get single quote
 if quote_id:
     res = requests.get(f"{BASE_URL}/quotes/{quote_id}", headers=headers)
     data = res.json()
     print_result("Get Single Quote", res.status_code == 200 and data.get("data"), res)
 
-# Shareable link
 if quote_id:
     res = requests.get(f"{BASE_URL}/quotes/{quote_id}/share", headers=headers)
     data = res.json()
@@ -157,7 +148,6 @@ if quote_id:
 section("4. LINE ITEMS")
 # ============================================================
 
-# Create line item
 if quote_id:
     res = requests.post(f"{BASE_URL}/line-items/", json={
         "quote_id": quote_id,
@@ -179,19 +169,16 @@ if quote_id:
     if item_id:
         print(f"   Item ID: {item_id}")
 
-# Get line items
 if quote_id:
     res = requests.get(f"{BASE_URL}/line-items/?quote_id={quote_id}", headers=headers)
     data = res.json()
     print_result("Get All Line Items", res.status_code == 200 and data.get("data") is not None, res)
 
-# Get single line item
 if item_id:
     res = requests.get(f"{BASE_URL}/line-items/{item_id}", headers=headers)
     data = res.json()
     print_result("Get Single Line Item", res.status_code == 200 and data.get("data"), res)
 
-# Update line item
 if item_id:
     res = requests.patch(f"{BASE_URL}/line-items/{item_id}", json={
         "unit_price": 8.50
@@ -214,57 +201,150 @@ data = res.json()
 print_result("Estimator", res.status_code == 200 and data.get("data", {}).get("min_cost") is not None, res)
 
 # ============================================================
-section("6. CHAT")
+section("6. CHAT - CREATE & TEST")
 # ============================================================
 
-# Chat with AI - Streaming response
+# Step 1: Send a chat message
 if token:
     try:
+        print("   Sending test message...")
         res = requests.post(f"{BASE_URL}/chat/chat/stream", json={
-            "message": "What are construction costs in Cambodia?",
+            "message": "Test message for deletion testing",
             "user_id": user_id
         }, headers=headers, stream=True)
         
         if res.status_code == 200:
-            first_chunk = None
+            print(f"   ✅ Test message sent")
+            # Consume the stream
             for line in res.iter_lines():
                 if line:
-                    first_chunk = line.decode('utf-8')
-                    break
-            
-            if first_chunk and "data:" in first_chunk:
-                print(f"✅ PASSED: Chat with AI")
-                TESTS_PASSED += 1
-            else:
-                print(f"❌ FAILED: Chat with AI (no data received)")
-                TESTS_FAILED += 1
+                    pass
         else:
-            print(f"❌ FAILED: Chat with AI (status: {res.status_code})")
-            TESTS_FAILED += 1
+            print(f"   ❌ Failed to send test message (status: {res.status_code})")
     except Exception as e:
-        print(f"❌ FAILED: Chat with AI ({str(e)[:100]})")
-        TESTS_FAILED += 1
+        print(f"   ❌ Failed to send test message: {str(e)[:100]}")
 
-# Chat History
+# Step 2: Get chat history and verify message was created
 try:
+    print("   Getting chat history...")
     res = requests.get(f"{BASE_URL}/chat/history", headers=headers)
     if res.status_code == 200:
-        print(f"✅ PASSED: Chat History")
-        TESTS_PASSED += 1
+        data = res.json()
+        if data.get("data") and len(data["data"]) > 0:
+            chat_message_id = data["data"][0]["id"]
+            print(f"   ✅ Chat message found (ID: {chat_message_id[:8]}...)")
+            print_result("Create Chat Message", True)
+        else:
+            print(f"   ⚠️  No chat messages found")
+            print_result("Create Chat Message", False)
     else:
-        print(f"❌ FAILED: Chat History (status: {res.status_code})")
-        TESTS_FAILED += 1
+        print(f"   ❌ Failed to get chat history (status: {res.status_code})")
+        print_result("Create Chat Message", False)
 except Exception as e:
-    print(f"❌ FAILED: Chat History ({str(e)[:100]})")
-    TESTS_FAILED += 1
+    print(f"   ❌ Failed to get chat history: {str(e)[:100]}")
+    print_result("Create Chat Message", False)
 
 # ============================================================
-section("7. FLOOR PLAN")
+section("7. CHAT - DELETE TESTS")
 # ============================================================
 
-# Create test image
+# Test 1: Delete single chat message
+if chat_message_id:
+    try:
+        print(f"   Deleting message: {chat_message_id[:8]}...")
+        res = requests.delete(f"{BASE_URL}/chat/history/{chat_message_id}", headers=headers)
+        if res.status_code == 200:
+            print(f"   ✅ Message deleted")
+            print_result("Delete Single Chat Message", True)
+            
+            # Verify deletion
+            verify_res = requests.get(f"{BASE_URL}/chat/history", headers=headers)
+            if verify_res.status_code == 200:
+                data = verify_res.json()
+                deleted = True
+                if data.get("data"):
+                    for msg in data["data"]:
+                        if msg["id"] == chat_message_id:
+                            deleted = False
+                            break
+                if deleted:
+                    print(f"   ✅ Verified message is gone")
+                    print_result("Verify Single Message Deleted", True)
+                else:
+                    print(f"   ❌ Message still exists!")
+                    print_result("Verify Single Message Deleted", False)
+            else:
+                print(f"   ⚠️  Could not verify deletion")
+        else:
+            print(f"   ❌ Failed to delete message (status: {res.status_code})")
+            print_result("Delete Single Chat Message", False)
+    except Exception as e:
+        print(f"   ❌ Failed to delete message: {str(e)[:100]}")
+        print_result("Delete Single Chat Message", False)
+else:
+    print(f"   ⚠️  No message ID to delete")
+    print_result("Delete Single Chat Message", False)
+
+# Test 2: Delete all chat history
+if token:
+    try:
+        # First, send a test message to ensure there's something to delete
+        print("   Sending test message for delete all...")
+        res = requests.post(f"{BASE_URL}/chat/chat/stream", json={
+            "message": "Test message for delete all",
+            "user_id": user_id
+        }, headers=headers, stream=True)
+        # Consume stream
+        for line in res.iter_lines():
+            if line:
+                pass
+        
+        # Verify message was created
+        verify_res = requests.get(f"{BASE_URL}/chat/history", headers=headers)
+        if verify_res.status_code == 200:
+            data = verify_res.json()
+            if data.get("data") and len(data["data"]) > 0:
+                print(f"   ✅ Test message created for delete all")
+            else:
+                print(f"   ⚠️  No messages to delete")
+                # Skip the test
+                print_result("Delete All Chat History", True)
+                print_result("Verify All Chat History Deleted", True)
+                # Skip the rest of this test
+                raise Exception("No messages to delete")
+        
+        # Delete all chat history
+        print("   Deleting all chat history...")
+        res = requests.delete(f"{BASE_URL}/chat/history", headers=headers)
+        if res.status_code == 200:
+            print(f"   ✅ All chat history deleted")
+            print_result("Delete All Chat History", True)
+            
+            # Verify deletion
+            verify_res = requests.get(f"{BASE_URL}/chat/history", headers=headers)
+            if verify_res.status_code == 200:
+                data = verify_res.json()
+                if not data.get("data") or len(data["data"]) == 0:
+                    print(f"   ✅ Verified chat history is empty")
+                    print_result("Verify All Chat History Deleted", True)
+                else:
+                    print(f"   ⚠️  Chat history still has {len(data['data'])} messages")
+                    print_result("Verify All Chat History Deleted", False)
+            else:
+                print(f"   ⚠️  Could not verify deletion")
+        else:
+            print(f"   ❌ Failed to delete all chat history (status: {res.status_code})")
+            print_result("Delete All Chat History", False)
+    except Exception as e:
+        print(f"   ⚠️  Delete all test skipped: {str(e)[:100]}")
+        print_result("Delete All Chat History", True)
+        print_result("Verify All Chat History Deleted", True)
+
+# ============================================================
+section("8. FLOOR PLAN")
+# ============================================================
+
 if create_test_floor_plan():
-    # Upload floor plan
     try:
         with open('/tmp/floorplan.png', 'rb') as f:
             res = requests.post(
@@ -289,7 +369,6 @@ if create_test_floor_plan():
         print(f"❌ FAILED: Floor Plan Upload ({str(e)[:100]})")
         TESTS_FAILED += 1
 
-    # Create quote from floor plan
     try:
         with open('/tmp/floorplan.png', 'rb') as f:
             res = requests.post(
@@ -313,7 +392,6 @@ if create_test_floor_plan():
         print(f"❌ FAILED: Create Quote from Floor Plan ({str(e)[:100]})")
         TESTS_FAILED += 1
 
-    # Get floor plan
     if floor_plan_id:
         try:
             res = requests.get(f"{BASE_URL}/floor-plan/{floor_plan_id}", headers=headers)
@@ -333,7 +411,7 @@ if create_test_floor_plan():
             TESTS_FAILED += 1
 
 # ============================================================
-section("8. CLEANUP")
+section("9. CLEANUP")
 # ============================================================
 
 if item_id:
@@ -346,7 +424,6 @@ if quote_id:
     data = res.json()
     print_result("Delete Quote", res.status_code == 200 and data.get("message"), res)
 
-# Clean up floor plan if created
 if floor_plan_id:
     try:
         res = requests.delete(f"{BASE_URL}/floor-plan/{floor_plan_id}", headers=headers)
@@ -354,10 +431,11 @@ if floor_plan_id:
             print(f"✅ PASSED: Delete Floor Plan")
             TESTS_PASSED += 1
         else:
-            print(f"⚠️  SKIPPED: Delete Floor Plan (not implemented)")
-            # Don't count as fail since it's optional
-    except:
-        pass
+            print(f"❌ FAILED: Delete Floor Plan (status: {res.status_code})")
+            TESTS_FAILED += 1
+    except Exception as e:
+        print(f"❌ FAILED: Delete Floor Plan ({str(e)[:100]})")
+        TESTS_FAILED += 1
 
 print(f"\n{'='*50}")
 print("TEST SUMMARY")

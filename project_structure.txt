@@ -1,0 +1,89 @@
+.
+├── ai
+│   ├── analyze_quote.py
+│   ├── chatbot.py
+│   ├── compare_quotes.py
+│   ├── floorplan.py
+│   ├── materials.json
+│   ├── reference_data.py
+│   ├── test_analysis.py.save
+│   ├── test_compare.py
+│   └── test_demo.py
+├── api
+│   ├── __init__.py
+│   ├── router.py
+│   └── v1
+│       ├── __init__.py
+│       ├── analysis.py
+│       ├── analyze.py
+│       ├── auth.py
+│       ├── boq.py
+│       ├── chat.py
+│       ├── estimator.py
+│       ├── floor_plan.py
+│       ├── line_items.py
+│       ├── pdf.py
+│       ├── quotes.py
+│       ├── report.py
+│       └── suppliers.py
+├── config.py
+├── core
+│   ├── __init__.py
+│   ├── auth.py
+│   └── logging.py
+├── crud
+│   ├── __init__.py
+│   ├── analysis.py
+│   ├── analyze.py
+│   ├── chat.py
+│   ├── line_items.py
+│   ├── quotes.py
+│   └── suppliers.py
+├── data
+│   └── cambodia_prices.json
+├── db
+│   ├── __init__.py
+│   └── supabase.py
+├── docker-compose.yml
+├── Dockerfile
+├── doctl.yaml
+├── main.py
+├── models
+│   ├── __init__.py
+│   ├── analyze.py
+│   ├── auth.py
+│   ├── chat.py
+│   ├── estimator.py
+│   ├── line_items.py
+│   ├── messages.py
+│   ├── quotes.py
+│   └── suppliers.py
+├── project_structure.txt
+├── README.md
+├── requirements.txt
+├── routes
+│   └── quotes.py
+├── scripts
+│   ├── make_admin.py
+│   ├── seed_suppliers.py
+│   ├── test_api.py
+│   └── test_prompts.py
+├── services
+│   ├── __init__.py
+│   ├── ai_service.py
+│   ├── chat.py
+│   ├── estimator.py
+│   ├── floor_plan_service.py
+│   ├── groq_agent.py
+│   ├── groq_chat.py
+│   ├── groq_service.py
+│   ├── groq.py
+│   ├── ocr_service.py
+│   └── pdf_parser.py
+├── test_all_endpoints_final.py
+├── test_groq_connection.py
+└── utils
+    ├── __init__.py
+    └── response.py
+
+13 directories, 74 files

@@ -90,3 +90,37 @@ def get_history(
 @router.get("/")
 def chat_root():
     return success(message="Chat API is working with Groq AI!")
+
+@router.delete("/history/{message_id}")
+def delete_chat_message(
+    message_id: str,
+    current_user = Depends(get_current_user)
+):
+    """Delete a specific chat message"""
+    try:
+        # Check if message exists and belongs to user
+        result = supabase.table("chat_history").select("id").eq("id", message_id).eq("user_id", current_user["id"]).execute()
+        if not result.data or len(result.data) == 0:
+            return error(message="Chat message not found or access denied", status_code=404)
+        
+        # Delete the message
+        supabase.table("chat_history").delete().eq("id", message_id).eq("user_id", current_user["id"]).execute()
+        
+        return success(message="Chat message deleted successfully")
+        
+    except Exception as e:
+        return error(message=str(e), status_code=500)
+
+@router.delete("/history")
+def delete_all_chat_history(
+    current_user = Depends(get_current_user)
+):
+    """Delete all chat history for the current user"""
+    try:
+        # Delete all messages for this user
+        supabase.table("chat_history").delete().eq("user_id", current_user["id"]).execute()
+        
+        return success(message="All chat history deleted successfully")
+        
+    except Exception as e:
+        return error(message=str(e), status_code=500)
