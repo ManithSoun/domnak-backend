@@ -4,7 +4,8 @@ import time
 import os
 from PIL import Image, ImageDraw
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "http://127.0.0.1:8000/api/v1"
+ROOT_URL = "http://127.0.0.1:8000"
 TESTS_PASSED = 0
 TESTS_FAILED = 0
 
@@ -17,6 +18,7 @@ quote_id = None
 item_id = None
 floor_plan_id = None
 chat_message_id = None
+# message_id = None
 
 def print_result(name, passed, response=None):
     global TESTS_PASSED, TESTS_FAILED
@@ -69,7 +71,7 @@ def create_test_floor_plan():
 section("1. HEALTH CHECKS")
 # ============================================================
 
-res = requests.get(f"{BASE_URL}/health")
+res = requests.get(f"{ROOT_URL}/health")
 print_result("Health Check", res.status_code == 200 and res.json().get("status"), res)
 
 # ============================================================
@@ -245,6 +247,26 @@ except Exception as e:
     print_result("Create Chat Message", False)
 
 # ============================================================
+section("6. SUPPLIERS")
+# ============================================================
+
+res = requests.get(f"{BASE_URL}/suppliers/")
+data = res.json()
+print_result("Get All Suppliers", res.status_code == 200 and data.get("data") is not None, res)
+if data.get("data") and len(data["data"]) > 0:
+    supplier_id = data["data"][0]["id"]
+
+res = requests.get(f"{BASE_URL}/suppliers/Cement")
+data = res.json()
+print_result("Get Suppliers by Material", res.status_code == 200 and data.get("data") is not None, res)
+
+if supplier_id:
+    res = requests.post(f"{BASE_URL}/suppliers/{supplier_id}/click", headers=headers)
+    data = res.json()
+    print_result("Track Supplier Click", res.status_code == 200 and data.get("message"), res)
+
+
+# ============================================================
 section("7. CHAT - DELETE TESTS")
 # ============================================================
 
@@ -339,6 +361,7 @@ if token:
         print(f"   ⚠️  Delete all test skipped: {str(e)[:100]}")
         print_result("Delete All Chat History", True)
         print_result("Verify All Chat History Deleted", True)
+        
 
 # ============================================================
 section("8. FLOOR PLAN")
@@ -352,6 +375,7 @@ if create_test_floor_plan():
                 headers=headers,
                 files={"file": ("floorplan.png", f, "image/png")}
             )
+        print(f"Floor plan upload response: {res.json()}")
         
         if res.status_code == 200:
             data = res.json()
@@ -410,6 +434,68 @@ if create_test_floor_plan():
             print(f"❌ FAILED: Get Floor Plan ({str(e)[:100]})")
             TESTS_FAILED += 1
 
+# ============================================================
+section("X. ANALYSIS")
+# ============================================================
+
+if quote_id:
+    res = requests.post(f"{BASE_URL}/analysis/{quote_id}", headers=headers)
+    data = res.json()
+    print_result("Analyze Quote", res.status_code == 200 and not data.get("error"), res)
+
+    res = requests.get(f"{BASE_URL}/analysis/{quote_id}", headers=headers)
+    data = res.json()
+    print_result("Get Analysis Results", res.status_code == 200 and data.get("data") is not None, res)
+
+# ============================================================
+section("X. MESSAGES")
+# ============================================================
+
+res = requests.post(f"{BASE_URL}/auth/login", json={
+    "email": "admin@buildsafe.com",
+    "password": "Admin@2026"
+})
+admin_data = res.json()
+admin_id = admin_data.get("user_id") or admin_data.get("data", {}).get("user_id")
+admin_token = admin_data.get("access_token") or admin_data.get("data", {}).get("access_token")
+
+if admin_id:
+    res = requests.post(f"{BASE_URL}/messages/", json={
+        "receiver_id": admin_id,
+        "content": "Can you lower the cement price?"
+    }, headers=headers)
+    data = res.json()
+    message_id = None
+    if data.get("data"):
+        d = data["data"]
+        message_id = d[0]["id"] if isinstance(d, list) else d.get("id")
+    print_result("Send Message", res.status_code == 200 and not data.get("error"), res)
+
+    res = requests.get(f"{BASE_URL}/messages/{admin_id}", headers=headers)
+    print_result("Get Conversation", res.status_code == 200 and res.json().get("data") is not None, res)
+
+    res = requests.get(f"{BASE_URL}/messages/conversations", headers=headers)
+    print_result("Get All Conversations", res.status_code == 200 and res.json().get("data") is not None, res)
+
+    res = requests.get(f"{BASE_URL}/messages/unread", headers=headers)
+    print_result("Get Unread Count", res.status_code == 200 and res.json().get("data") is not None, res)
+
+    if message_id and admin_token:
+        admin_headers = {"authorization": f"Bearer {admin_token}"}
+        res = requests.patch(f"{BASE_URL}/messages/{message_id}/read", headers=admin_headers)
+        print_result("Mark Message as Read", res.status_code == 200 and res.json().get("message"), res)
+else:
+    print("   ⚠️  Skipping message tests — admin login failed")
+    
+# Before cleanup section
+res = requests.post(f"{BASE_URL}/auth/login", json={
+    "email": EMAIL,
+    "password": PASSWORD
+})
+data = res.json()
+token = data.get("access_token") or data.get("data", {}).get("access_token")
+headers = {"authorization": f"Bearer {token}"}
+    
 # ============================================================
 section("9. CLEANUP")
 # ============================================================

@@ -23,6 +23,9 @@ def build_ref_text():
 @router.post("/{quote_id}")
 def analysis_quote(quote_id: str, current_user = Depends(get_current_user)):
     try:
+        print(f"DEBUG: current_user type = {type(current_user)}")
+        print(f"DEBUG: current_user = {current_user}")
+        print(f"DEBUG: quote_id = {quote_id}")
         # Step 1 — verify ownership
         quote = supabase.table("quotes").select("*").eq("id", quote_id).eq("user_id", current_user.id).single().execute()
         if not quote.data:

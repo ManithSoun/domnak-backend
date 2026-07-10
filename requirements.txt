@@ -7,3 +7,4 @@ phonenumbers
 pydantic-settings
 python-dotenv
 python-multipart
+pytesseract
