@@ -6,3 +6,4 @@ __pycache__/
 ai/.env*
 
 logs/*.log
+logs/
