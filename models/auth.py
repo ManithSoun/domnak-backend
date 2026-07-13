@@ -36,8 +36,8 @@ class SignupRequest(BaseAuthRequest):
   @field_validator('role')
   @classmethod
   def validation_role(cls, value):
-    if value not in ['homeowner', 'contractor']:
-      raise ValueError("Role must be 'homeowner' or 'contractor '")
+    if value not in ['homeowner', 'contractor', 'architect']:
+      raise ValueError("Role must be 'homeowner', 'contractor', or 'architect'")
     return value
   
   @field_validator('phone_number')

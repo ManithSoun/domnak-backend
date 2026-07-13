@@ -29,10 +29,12 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         if not response or not response.user:
             raise HTTPException(status_code=401, detail="Invalid token")
         user = response.user
+        db_role = user.user_metadata.get("role", "homeowner")
+        mapped_role = "architect" if db_role == "contractor" else db_role
         return UserObj({
             "id": user.id,
             "email": user.email,
-            "role": user.user_metadata.get("role", "homeowner"),
+            "role": mapped_role,
             "full_name": user.user_metadata.get("full_name", ""),
             "phone_number": user.user_metadata.get("phone_number", "")
         })

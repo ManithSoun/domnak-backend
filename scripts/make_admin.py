@@ -28,9 +28,9 @@ def create_admin(email: str, password: str, name: str):
         time.sleep(1)
         supabase.table("users").insert({
             "id": user_id,
-            "name": name,
+            "full_name": name,
             "role": "admin",
-            "phone": "000000000"
+            "phone_number": "000000000"
         }).execute()
 
         print(f"Admin created successfully")

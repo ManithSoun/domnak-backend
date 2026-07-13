@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File
 from services.pdf_parser import parse_pdf
 from core.logging import logger
 from utils.response import success, error
+import json
 
 router = APIRouter()
 
@@ -28,7 +29,7 @@ async def upload_pdf(file: UploadFile = File(...)):
         if not line_items:
             return error(message="No line items found in PDF — make sure it contains a contractor quote", status_code=400)
         
-        logger.info(f"PDF parsed: {file.filename} — {len(line_items)} items extracted")
+        logger.info(f"PDF parsed: {file.filename} — {len(line_items)} items extracted: {json.dumps(line_items) if isinstance(line_items, list) else str(line_items)}")
         return success(data={"line_items": line_items})
     except Exception as e:
         logger.error(f"PDF parsing failed: {str(e)}")

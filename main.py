@@ -28,6 +28,18 @@ app.add_middleware(
 )
 
 @app.middleware("http")
+async def rewrite_api_prefix(request: Request, call_next):
+    path = request.scope["path"]
+    if path.startswith("/api/v1/"):
+        remaining = path[len("/api/v1"):]
+        if remaining.startswith("/analyze"):
+            remaining = "/analysis" + remaining[len("/analyze"):]
+        request.scope["path"] = remaining
+    elif path.startswith("/api/"):
+        request.scope["path"] = path[len("/api"):]
+    return await call_next(request)
+
+@app.middleware("http")
 async def log_rquests(request: Request, call_next):
     start = time.time()
     response = await call_next(request)

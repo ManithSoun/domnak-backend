@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator
-from typing import Optional
+from typing import Optional, List, Any
 
 class BaseQuoteRequest(BaseModel):
 
@@ -29,9 +29,11 @@ class QuoteRequest(BaseQuoteRequest):
     contractor_name: Optional[str] = None  
     total_amount: float                      
     quality_tier: Optional[str] = "standard" 
+    rooms: Optional[List[Any]] = []
 
 
 class QuoteUpdateRequest(BaseQuoteRequest):
     contractor_name: Optional[str] = None
     total_amount: Optional[float] = None
     quality_tier: Optional[str] = None
+    rooms: Optional[List[Any]] = None

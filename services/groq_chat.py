@@ -33,7 +33,15 @@ class GroqChatService:
         ]
         
         if history:
-            messages.extend(history[-10:])
+            # history is desc-ordered (newest first), so slice first 10 and reverse to chronological order
+            for item in reversed(history[:10]):
+                if isinstance(item, dict):
+                    user_text = item.get("message")
+                    assistant_text = item.get("response")
+                    if user_text:
+                        messages.append({"role": "user", "content": user_text})
+                    if assistant_text:
+                        messages.append({"role": "assistant", "content": assistant_text})
         
         messages.append({"role": "user", "content": user_message})
         

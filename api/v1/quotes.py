@@ -8,12 +8,69 @@ from typing import Optional
 
 router = APIRouter()
 
+def parse_float_safe(val) -> float:
+    if val is None:
+        return 0.0
+    if isinstance(val, (int, float)):
+        return float(val)
+    try:
+        cleaned = str(val).replace("$", "").replace(",", "").strip()
+        return float(cleaned)
+    except (ValueError, TypeError):
+        return 0.0
+
+def clean_unit(val) -> str:
+    if not val:
+        return "pcs"
+    val = str(val).lower().strip()
+    allowed = ["pcs", "bag", "kg", "liter", "meter", "ton", "set"]
+    if val in allowed:
+        return val
+    mapping = {
+        "unit": "pcs",
+        "units": "pcs",
+        "piece": "pcs",
+        "pieces": "pcs",
+        "box": "pcs",
+        "m": "meter",
+        "meters": "meter",
+        "sqm": "pcs",
+        "m2": "pcs",
+        "m3": "pcs"
+    }
+    return mapping.get(val, "pcs")
+
 @router.post("/")
 def create_quote(data: QuoteRequest, current_user = Depends(get_current_user)):
     try:
         # Use dictionary key access
         user_id = current_user["id"]
         result = quote_crud.create_quote(user_id, data.contractor_name, data.total_amount)
+        
+        if result and data.rooms:
+            quote_id = result["id"]
+            for room in data.rooms:
+                material_name = room.get("material_name") or room.get("name")
+                if material_name:
+                    qty = parse_float_safe(room.get("quantity") or room.get("length"))
+                    up = parse_float_safe(room.get("unit_price"))
+                    tp = parse_float_safe(room.get("total_price")) or (qty * up)
+                    supabase.table("line_items").insert({
+                        "quote_id": quote_id,
+                        "material_name": material_name,
+                        "quantity": qty,
+                        "unit": clean_unit(room.get("unit")),
+                        "unit_price": up,
+                        "total_price": tp
+                    }).execute()
+            
+            # Auto-trigger analysis
+            try:
+                from api.v1.analysis import analysis_quote
+                analysis_quote(quote_id, current_user)
+            except Exception as ae:
+                print(f"Failed to auto-analyze: {ae}")
+                
         return success(data=result)
     except Exception as e:
         return error(message=str(e), status_code=500)
@@ -60,6 +117,33 @@ def update_quote(quote_id: str, data: QuoteUpdateRequest, current_user = Depends
             data.contractor_name,
             data.total_amount
         )
+        
+        if data.rooms is not None:
+            # Delete old line items
+            supabase.table("line_items").delete().eq("quote_id", quote_id).execute()
+            # Save new line items
+            for room in data.rooms:
+                material_name = room.get("material_name") or room.get("name")
+                if material_name:
+                    qty = parse_float_safe(room.get("quantity") or room.get("length"))
+                    up = parse_float_safe(room.get("unit_price"))
+                    tp = parse_float_safe(room.get("total_price")) or (qty * up)
+                    supabase.table("line_items").insert({
+                        "quote_id": quote_id,
+                        "material_name": material_name,
+                        "quantity": qty,
+                        "unit": clean_unit(room.get("unit")),
+                        "unit_price": up,
+                        "total_price": tp
+                    }).execute()
+            
+            # Auto-trigger analysis
+            try:
+                from api.v1.analysis import analysis_quote
+                analysis_quote(quote_id, current_user)
+            except Exception as ae:
+                print(f"Failed to auto-analyze: {ae}")
+                
         return success(data=result)
     except Exception as e:
         return error(message=str(e), status_code=500)

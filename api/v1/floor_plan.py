@@ -125,6 +125,23 @@ async def create_quote_from_floor_plan(
     except Exception as e:
         return error(message=str(e), status_code=500)
 
+@router.get("/")
+def list_floor_plans(
+    current_user = Depends(get_current_user)
+):
+    """List all floor plans for the current user, newest first"""
+    try:
+        result = (
+            supabase.table("floor_plans")
+            .select("*")
+            .eq("user_id", current_user["id"])
+            .order("created_at", desc=True)
+            .execute()
+        )
+        return success(data=result.data if result.data else [])
+    except Exception as e:
+        return error(message=str(e), status_code=500)
+
 @router.get("/{floor_plan_id}")
 def get_floor_plan(
     floor_plan_id: str,
