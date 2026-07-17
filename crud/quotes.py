@@ -1,7 +1,7 @@
-from db.supabase import supabase
+from db.supabase import supabase, supabase_admin
 from datetime import datetime
 
-def create_quote(user_id, contractor_name, total_amount):
+def create_quote(user_id, contractor_name, total_amount, client_id=None):
     data = {
         "user_id": user_id,
         "contractor_name": contractor_name,
@@ -10,7 +10,9 @@ def create_quote(user_id, contractor_name, total_amount):
         "quality_tier": "standard",
         "created_at": datetime.now().isoformat()
     }
-    result = supabase.table("quotes").insert(data).execute()
+    if client_id:
+        data["client_id"] = client_id
+    result = supabase_admin.table("quotes").insert(data).execute()
     
     # Return the first item from data array
     if result.data and len(result.data) > 0:
@@ -27,13 +29,13 @@ def update_quote(quote_id, user_id, contractor_name, total_amount):
         "total_amount": total_amount,
         "updated_at": datetime.now().isoformat()
     }
-    result = supabase.table("quotes").update(data).eq("id", quote_id).eq("user_id", user_id).execute()
+    result = supabase_admin.table("quotes").update(data).eq("id", quote_id).eq("user_id", user_id).execute()
     if result.data and len(result.data) > 0:
         return result.data[0]
     return None
 
 def delete_quote(quote_id, user_id):
-    result = supabase.table("quotes").delete().eq("id", quote_id).eq("user_id", user_id).execute()
+    result = supabase_admin.table("quotes").delete().eq("id", quote_id).eq("user_id", user_id).execute()
     if result.data and len(result.data) > 0:
         return result.data[0]
     return None

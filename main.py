@@ -30,20 +30,32 @@ app.add_middleware(
 @app.middleware("http")
 async def rewrite_api_prefix(request: Request, call_next):
     path = request.scope["path"]
-    if path.startswith("/api/v1/"):
-        remaining = path[len("/api/v1"):]
-        if remaining.startswith("/analyze"):
-            remaining = "/analysis" + remaining[len("/analyze"):]
-        request.scope["path"] = remaining
-    elif path.startswith("/api/"):
-        request.scope["path"] = path[len("/api"):]
-    return await call_next(request)
+    print(f"=== REWRITE: before={path}")
+    try:
+        if path.startswith("/api/v1/"):
+            remaining = path[len("/api/v1"):]
+            if remaining.startswith("/analyze"):
+                remaining = "/analysis" + remaining[len("/analyze"):]
+            request.scope["path"] = remaining
+        elif path.startswith("/api/"):
+            request.scope["path"] = path[len("/api"):]
+        print(f"=== REWRITE: after={request.scope['path']}")
+    except Exception as e:
+        print(f"=== REWRITE ERROR: {e}")
+        raise
+    try:
+        return await call_next(request)
+    except Exception as e:
+        print(f"=== REWRITE call_next ERROR: {e}")
+        raise
 
 @app.middleware("http")
 async def log_rquests(request: Request, call_next):
+    print(f"=== MIDDLEWARE START: {request.method} {request.url.path}")
     start = time.time()
     response = await call_next(request)
     duration = round((time.time() - start) * 1000)
+    print(f"=== MIDDLEWARE END: {request.method} {request.url.path} -> {response.status_code} ({duration}ms)")
     logger.info(f"{request.method} {request.url.path} -> {response.status_code} ({duration}ms)")
     return response
 

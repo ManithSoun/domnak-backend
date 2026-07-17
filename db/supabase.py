@@ -6,3 +6,9 @@ supabase = create_client(
     settings.supabase_url,
     settings.supabase_service_key
 )
+
+# Service role client for admin operations (bypasses RLS)
+supabase_admin = create_client(
+    settings.supabase_url,
+    settings.supabase_service_key
+)

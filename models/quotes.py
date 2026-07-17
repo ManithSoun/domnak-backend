@@ -26,10 +26,11 @@ class BaseQuoteRequest(BaseModel):
 
 
 class QuoteRequest(BaseQuoteRequest):
-    contractor_name: Optional[str] = None  
-    total_amount: float                      
-    quality_tier: Optional[str] = "standard" 
+    contractor_name: Optional[str] = None
+    total_amount: float
+    quality_tier: Optional[str] = "standard"
     rooms: Optional[List[Any]] = []
+    client_id: Optional[str] = None  # ID of the homeowner this quote is sent to
 
 
 class QuoteUpdateRequest(BaseQuoteRequest):
@@ -37,3 +38,4 @@ class QuoteUpdateRequest(BaseQuoteRequest):
     total_amount: Optional[float] = None
     quality_tier: Optional[str] = None
     rooms: Optional[List[Any]] = None
+    client_id: Optional[str] = None
