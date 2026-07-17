@@ -44,6 +44,29 @@ def send_message(data: MessageRequest, current_user=Depends(get_current_user)):
             content=data.content,
             quote_id=str(data.quote_id) if data.quote_id else None,
         )
+
+        # Create notification for the receiver
+        try:
+            # Try to get sender's full name from users table
+            sender_profile = supabase.table("users").select("full_name").eq("id", user_id).execute()
+            sender_name = sender_profile.data[0]["full_name"] if (sender_profile.data and sender_profile.data[0].get("full_name")) else "Someone"
+            
+            message_preview = data.content[:40] + "..." if len(data.content) > 40 else data.content
+            notification = {
+                "user_id": receiver_id,
+                "type": "message",
+                "title": "New Message",
+                "message": f"{sender_name} sent you a message: \"{message_preview}\"",
+                "data": {
+                    "sender_id": user_id,
+                    "sender_name": sender_name,
+                    "message_id": result[0]["id"] if isinstance(result, list) and result else None
+                }
+            }
+            supabase.table("notifications").insert(notification).execute()
+        except Exception as ne:
+            logger.error(f"Failed to create notification for message: {str(ne)}")
+
         return success(data=result, status_code=status.HTTP_201_CREATED)
     except Exception as e:
         import traceback
